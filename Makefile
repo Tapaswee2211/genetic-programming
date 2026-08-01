@@ -8,7 +8,7 @@ OBJS = $(SRCS:.c=.o)
 TARGET = gp
 
 geneticAlgo: main.c 
-	$(CC) $(CFLAGS) -o gp main.c $(LIBS)
+	$(CC) $(CFLAGS) -o gp main.c style.h $(LIBS)
 
 all: $(TARGET)
 

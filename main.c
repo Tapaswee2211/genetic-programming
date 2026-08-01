@@ -2,20 +2,19 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<SDL2/SDL.h>
+#include "./style.h"
+#include <time.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
 #define AGENTS_COUNT 5 
 
-#define BOARD_WIDTH 100
-#define BOARD_HEIGHT 100
+#define BOARD_WIDTH 10
+#define BOARD_HEIGHT 10
 
 #define CELL_WIDTH ((float)SCREEN_WIDTH / BOARD_WIDTH)
 #define CELL_HEIGHT ((float)SCREEN_HEIGHT / BOARD_HEIGHT)
-
-#define BACKGROUND_COLOR "E8EEF2"
-#define GRID_COLOR "0A1045"
 
 Uint8 hex_to_dec(char nibble){
   if ( '0' <= nibble && nibble <= '9') return nibble - '0';
@@ -106,7 +105,7 @@ void render_board_grid(SDL_Renderer *renderer){
 }
 
 int random_int_range(int low, int high){
-  return rand() %   (high - low)  + low;
+  return rand() % (high - low)  + low;
 }
 
 Dir random_dir(void){
@@ -124,18 +123,25 @@ Agent random_agent(void){
 }
 
 void init_agents(void){
-  for (size_t i =0; i < AGENTS_COUNT ; i++){
+  for (size_t i = 0; i < AGENTS_COUNT ; i++){
     agents[i] = random_agent();
   }
 
 }
 
 void render_agent(SDL_Renderer * renderer, Agent agent) {
-  assert(0 && "TODO: render_agent is not yet implemented");
+  sdl_set_color_hex(renderer, AGENT_COLOR);
+  SDL_Rect rect = {
+    (int) floorf(agent.pos_x * CELL_WIDTH),
+    (int) floorf(agent.pos_y * CELL_HEIGHT),
+    (int) floorf(CELL_WIDTH),
+    (int) floorf(CELL_HEIGHT)
+  };
+  scc( SDL_RenderFillRect(renderer, &rect));
+
 }
 
 void render_all_agents(SDL_Renderer * renderer ) {
-
   for(size_t i = 0 ; i < AGENTS_COUNT; ++i) {
     render_agent(renderer, agents[i]);
   }  
@@ -143,7 +149,9 @@ void render_all_agents(SDL_Renderer * renderer ) {
 
 int main (int argc, char * argv[])
 {
+  init_agents();
   scc(SDL_Init(SDL_INIT_VIDEO));
+  srand(time(NULL));
   SDL_Window * const window = scp(SDL_CreateWindow("Game1",
                                        0, 0, 
                                        SCREEN_WIDTH, SCREEN_HEIGHT, 
@@ -166,6 +174,7 @@ int main (int argc, char * argv[])
       sdl_set_color_hex(renderer, BACKGROUND_COLOR);
       scc(SDL_RenderClear(renderer));
       render_board_grid(renderer);
+      render_all_agents(renderer);
 
       SDL_RenderPresent(renderer);
     }

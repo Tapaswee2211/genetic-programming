@@ -35,7 +35,8 @@ typedef enum {
 
 } Agent_Actions;
 
-Agent agents[AGENTS_COUNT]
+Agent agents[AGENTS_COUNT];
+
 int scc(int code){
   if (code < 0 ) { 
     fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
@@ -80,16 +81,17 @@ int random_int_range(int low, int high){
 }
 
 Dir random_dir(void){
-  return (Dir) random_int_range(0, 4)
+  return (Dir) random_int_range(0, 4);
 }
 
 Agent random_agent(void){
-  Agent agent{0};
+  Agent agent = {0};
   agent.pos_x = random_int_range(0, BOARD_WIDTH); 
   agent.pos_y = random_int_range(0, BOARD_HEIGHT); 
   agent.direction = random_dir();
   agent.hunger = 100;
   agent.health = 100;
+  return agent;
 }
 
 void init_agents(){

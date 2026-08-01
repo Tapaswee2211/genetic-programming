@@ -5,12 +5,37 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+#define AGENTS_COUNT 5 
+
 #define BOARD_WIDTH 100
 #define BOARD_HEIGHT 100
 
 #define CELL_WIDTH ((float)SCREEN_WIDTH / BOARD_WIDTH)
 #define CELL_HEIGHT ((float)SCREEN_HEIGHT / BOARD_HEIGHT)
 
+typedef enum {
+  DIR_RIGHT = 0,
+  DIR_UP = 1,
+  DIR_LEFT = 2,
+  DIR_DOWN = 3,
+} Dir;
+
+typedef struct {
+  int pos_x, pos_y;
+  Dir direction;
+  int hunger;
+  int health;
+} Agent;
+
+typedef enum {
+  ACTION_NOP=0,
+  ACTION_STEP,
+  ACTION_EAT,
+  ACTION_ATTACK,
+
+} Agent_Actions;
+
+Agent agents[AGENTS_COUNT]
 int scc(int code){
   if (code < 0 ) { 
     fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
@@ -45,9 +70,33 @@ void render_board_grid(SDL_Renderer *renderer){
     scc(SDL_RenderDrawLine(renderer,
                           1, 
                           x * CELL_HEIGHT, 
-                          SCREEN_WIDTH, 
+                          SCREEN_WIDTH,  
                           x * CELL_HEIGHT));
   }
+}
+
+int random_int_range(int low, int high){
+  return rand() %   (high - low)  + low;
+}
+
+Dir random_dir(void){
+  return (Dir) random_int_range(0, 4)
+}
+
+Agent random_agent(void){
+  Agent agent{0};
+  agent.pos_x = random_int_range(0, BOARD_WIDTH); 
+  agent.pos_y = random_int_range(0, BOARD_HEIGHT); 
+  agent.direction = random_dir();
+  agent.hunger = 100;
+  agent.health = 100;
+}
+
+void init_agents(){
+  for (size_t i =0; i < AGENTS_COUNT ; i++){
+    agents[i] = random_agent();
+  }
+
 }
 
 int main (int argc, char * argv[])

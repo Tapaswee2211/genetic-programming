@@ -1,8 +1,8 @@
 #ifndef STYLE_H_
 #define STYLE_H_
 
-#define BACKGROUND_COLOR "E8EEF2"
-#define GRID_COLOR "0A1045"
-#define AGENT_COLOR "009DDC"
+#define BACKGROUND_COLOR 0xE8EEF2FF
+#define GRID_COLOR 0x0A1045FF
+#define AGENT_COLOR 0x009DDCFF
 
 #endif

@@ -16,17 +16,6 @@
 #define CELL_WIDTH ((float)SCREEN_WIDTH / BOARD_WIDTH)
 #define CELL_HEIGHT ((float)SCREEN_HEIGHT / BOARD_HEIGHT)
 
-Uint8 hex_to_dec(char nibble){
-  if ( '0' <= nibble && nibble <= '9') return nibble - '0';
-  if ( 'a' <= nibble && nibble <= 'f') return nibble - 'a' + 10;
-  if ( 'A' <= nibble && nibble <= 'F') return nibble - 'A' + 10;
-  printf("Incorrect Hex Character %c\n", nibble);
-  exit(1);
-}
-
-Uint8 parse_hex_byte( const char *byte_hex) {
-  return hex_to_dec(*byte_hex) * 0x10 + hex_to_dec(*(byte_hex+ 1) );
-}
 
 int scc(int code){
   if (code < 0 ) { 
@@ -44,14 +33,12 @@ void *scp(void *ptr) {
   return ptr;
 }
 
-void sdl_set_color_hex (SDL_Renderer * renderer, const char * hex){
-  size_t hex_len = strlen(hex);
-  assert(hex_len == 6);
+void sdl_set_color_hex (SDL_Renderer * renderer, Uint32 hex){
   scc(SDL_SetRenderDrawColor(renderer,
-                             parse_hex_byte(hex),
-                             parse_hex_byte(hex+2),
-                             parse_hex_byte(hex+4),
-                             255
+                             (hex >> (3 * 8)) & 0xFF,
+                             (hex >> (2 * 8)) & 0xFF,
+                             (hex >> (1 * 8)) & 0xFF,
+                             (hex >> (0 * 8)) & 0xFF
                              )
       );
 }
